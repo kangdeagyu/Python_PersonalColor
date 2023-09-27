@@ -46,7 +46,7 @@ class AI_Service:
 
             clf = joblib.load("app/static/voting_clf.h5")
             pre = clf.predict([[r,g,b]])
-            return (pre,forehead_color_rgb)
+            return (pre,r,g,b)
         except Exception as e:
             print('error:',e)
             err = ['인식오류']

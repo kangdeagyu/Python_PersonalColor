@@ -2,6 +2,7 @@ from flask_restx import Resource, fields, abort, reqparse
 from flask import jsonify, request
 from werkzeug.datastructures import FileStorage
 from ..services.ai_service import AI_Service
+import warnings
 
 upload_parser = reqparse.RequestParser()
 upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
@@ -17,7 +18,9 @@ def ai_routes(ai_ns):
         def post(self):           
             new_sentence = request.data
             try:
-                personal_color, rgb = AI_Service.AI_predict(new_sentence)
+                warnings.filterwarnings('ignore')
+                personal_color, r, g, b = AI_Service.AI_predict(new_sentence)
+                print(r,g,b)
             except OSError:
                 abort(500, error="Cannot find the AI Model")
-            return jsonify({'result': personal_color[0], 'rgb': rgb})
+            return jsonify({'result': personal_color[0], 'r': r, 'g' : g, 'b':b})
